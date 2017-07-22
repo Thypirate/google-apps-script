@@ -1,0 +1,38 @@
+<?!= include('styles.html'); ?>
+<div id="wrapper">
+  <div>
+    <span>Para iniciar primeiro adiciona um aprovador por introduzindo o email do aprovador no campo email e carregar no botão adicionar.
+    Após de adcionar os aprovadores, carrega no botão iniciar para começar o workflow.</span>
+  </div>
+  <br>
+  <div>
+    <span class="sectionHeader">Aprovadores</span><br>
+    <div id="approvers"></div>
+      <div>
+        <paper-input label="E-mail" id="approver" type="email"></paper-input>
+        <paper-button value="Adicionar" id="addApprover"class="button blueButton">Adicionar</paper-button>
+      </div>
+    </div>
+    <br>
+    <div class="center">
+      <paper-button id="startButton" class="button redButton">Iniciar</paper-button>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#addApprover').click(addApprover);
+    $('#startButton').click(startWorkflow);
+    });
+function addApprover(){
+google.script.run.withSuccessHandler(function() {
+$('#approver').val('');
+}).addApprovers($("#approver").val());
+}
+
+function startWorkflow(){ //client side
+google.script.run.withSuccessHandler(function() {
+$('#wrapper').html("Notificações foram enviados aos aprovadores. <br>As resposta podem ser vistas no menu estado da aprovação");
+}).start();
+}
+</script>
