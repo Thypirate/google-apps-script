@@ -1,0 +1,42 @@
+<?!= include('styles.html'); ?>
+<div id="wrapper">
+  <br>
+  <div>
+    <span class="sectionHeader">À espera da aprovação</span><br>
+    <div class="spaceAfter" id="notApproved"></div>
+  </div>
+  <br>
+  <hr>
+  <div>
+    <span class="sectionHeader">Aprovadores com resposta</span><br>
+    <div id="responded"></div>
+  </div>
+  <br>
+  <br>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>
+  $(document).ready(function() {
+    loadApproverStatus();
+  });
+  function loadApproverStatus(){
+    google.script.run.withSuccessHandler(function(approvers) {
+      for(var i = 0; i < approvers.length; i++){
+        if(approvers[i].estado == "null" || approvers[i].estado =='EmailSent'){
+          $("#notApproved").append('<span class="approverEmail red"> '+approvers[i].email+' </span>'+'<span class="reminder" email="'+approvers[i].email+'">Enviar lembrete</span><br>');
+        }else{
+          $("#responded").append('<span class="approverEmail green"> '+approvers[i].email+'</span><br>'+'<span class="status spaceAfter">'+approvers[i].estado+'</span><br>');
+        }
+      }
+      $('.reminder').on('click', function() {
+        //adds a click handler to each Send Reminder button
+        sendReminder($(this).attr('email'));
+        $(this).text('Enviado');
+      });
+    }).getApprovers();
+  }
+  function sendReminder(approver){
+    google.script.run.withSuccessHandler(function() {
+    }).sendReminder(approver);
+  }
+</script>

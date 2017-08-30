@@ -1,0 +1,43 @@
+<?!= include('styles.html'); ?>
+<div id="wrapper">
+  <div>
+     <span>Foi pedido para aprovar este documento.Por favor selecione o tipo de aprovação da lista abaixo. Clique o botão de enviar para confirmar a escolha e notificar o responsável do documento. </span>
+   </div>
+   <div>
+     <br>
+     <select id ="status">
+     <option value="Aprovado">Aprovado</option>
+     <option value ="Rejeitado">Rejeitado</option>
+     </select>
+   </div>
+   <br>
+   <div class="center">
+     <paper-button id="submitButton" class="button redButton">Enviar</paper-button>
+   </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>
+ $(document).ready(function() {
+   $('#submitButton').click(submit);
+    google.script.run.withSuccessHandler(function(approvers) {
+      var notListed = true;
+      var user = <?= getSession();?>;
+      for(var i = 0; i < approvers.length; i++){
+        if(user.toLowerCase() == approvers[i].email.toLowerCase()){
+        notListed = false;
+        break;
+        }
+      }
+      if(notListed){
+        $('#wrapper').html('Não tem permissão para aprovar este documento');
+      }
+    }).getApprovers();
+  });
+function submit(){
+  var email = <?= getSession();?>;
+  var status = $('#status').val();
+  google.script.run.withSuccessHandler(function() {
+    $('#wrapper').html('O estado da aprovação foi guardado com sucesso');
+    }).setApproverStatus(email, status);
+};
+</script>
