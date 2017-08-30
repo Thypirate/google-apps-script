@@ -62,7 +62,6 @@ function addApprovers(email) {
 function getApprovers() {
 
   var db = SpreadsheetApp.openById("1dr2DvUTSw8EBKw1j_Gju365TiCzCa7BUkPfxXx_PzI4");
-  var docID = DocumentApp.getActiveDocument().getId();
   var ss = db.getActiveSheet();
   var approvers = [];
   var data = ObjApp.rangeToObjects(ss.getDataRange().getValues());
@@ -78,7 +77,6 @@ function getApprovers() {
 function getApprover(email) {
 
   var db = SpreadsheetApp.openById("1dr2DvUTSw8EBKw1j_Gju365TiCzCa7BUkPfxXx_PzI4");
-  var docID = DocumentApp.getActiveDocument().getId();
   var ss = db.getActiveSheet();
   var approvers = [];
   var data = ObjApp.rangeToObjects(ss.getDataRange().getValues());
@@ -142,6 +140,8 @@ function setApproverStatus(email, status){
 }
 
 function sendReminder(approverEmail){
+  var doc = DocumentApp.getActiveDocument();
+  var url = doc.getUrl();
   MailApp.sendEmail({
     to: approverEmail,
     subject: "Por favor valide o documento",

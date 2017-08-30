@@ -2,7 +2,7 @@
 var ui = SpreadsheetApp.getUi();
 var EMAIL_SENT = "SIM";
 var ESTADO = "FEITO";
-var dest = DriveApp.getFolderById("0B3v25NWgY5XrVHRsUy1LMVFFTmM");//destination for the new document
+var DEST = DriveApp.getFolderById("0B3v25NWgY5XrVHRsUy1LMVFFTmM");//destination for the new document
 
 function generateLetters() {
 
@@ -10,12 +10,12 @@ function generateLetters() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getActiveSheet();
   var data = ObjApp.rangeToObjects(ss.getDataRange().getValues());
-  for(var i = 0; i < data.length; i++){
+  for (var i = 0; i < data.length; i++){
     var estado = data[i].estado;
     var emailEnviado = data[i].emailEnviado;
     var email = data[i].email;
     var message = "This is amazing";
-    if(estado != ESTADO && emailEnviado != EMAIL_SENT) {
+    if (estado != ESTADO && emailEnviado != EMAIL_SENT) {
     var subject = "Sending emails from a Spreadsheet";
     MailApp.sendEmail(email, subject, message);
     sheet.getRange(2 + i, 13).setValue(ESTADO);
@@ -25,7 +25,7 @@ function generateLetters() {
     var date = Utilities.formatDate(new Date(), "GMT-1", "yyyy-MM-dd");//actual date
     var nameWithSpaces = date+"_"+data[i].unidade+"_"+"ESI"+"_"+"SI"+"_"+"carta_acolhimento_estagiarios"+"_"+data[i].nome+"_"+data[i].numero;
     var nameWithUnderscores = nameWithSpaces.toString().replace(/\s/g,"_");//replace spaces with underscores
-    var doc = DriveApp.getFileById(templateID).makeCopy(nameWithUnderscores.toLowerCase(),dest);//make a copy of the document template and place it to the destination folder
+    var doc = DriveApp.getFileById(templateID).makeCopy(nameWithUnderscores.toLowerCase(), DEST);//make a copy of the document template and place it to the destination folder
     var docID = doc.getId();
 
     var docActive = DocumentApp.openById(docID);
